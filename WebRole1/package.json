@@ -2,7 +2,8 @@
 	"name": "so-642",
 	"version": "0.0.1",
 	"devDependencies": {
-		"nodeunit": "0.6.4"	
+		"nodeunit": "0.6.4",
+		"request": "2.2.9"
 	},
 	"private": true
 }
