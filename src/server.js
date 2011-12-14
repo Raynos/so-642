@@ -10,6 +10,9 @@ function throwError(err) {
 	throw err;
 }
 
-function routinesLoaded(files) {
+function routinesLoaded(err, files) {
+	if (err) {
+		return mediator.emit('boot.error', err);
+	}
 	mediator.emit('boot.ready');
 }
