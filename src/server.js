@@ -29,12 +29,12 @@ function load(directory, callback) {
 		files.forEach(handleFile);
 
 		function handleFile(file) {
-			var uri = path.join(dir, file);
+			var uri = path.join(directory, file);
 			if (file.substr(-3, 3) === ".js") {
 				require(uri);
 				next();
 			} else {
-				load(uri, cb);
+				load(uri, callback);
 			}
 		}
 	}
