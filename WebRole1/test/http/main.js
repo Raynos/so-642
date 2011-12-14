@@ -14,8 +14,24 @@ module.exports = {
 
 		req.end();
 
-		function handleResponse() {
-			
+		function handleResponse(res) {
+			var body = "";
+			test.equal(res.statusCode, 200, 
+				"statusCode is not 200");
+
+			res.on("data", appendDataToBody);
+
+			res.on("end", testBody);
+
+			function appendDataToBody(chunk) {
+				body += chunk;
+			}
+
+			function testBody() {
+				test.equal(body, "Hello World\n",
+					"body is not hello world");
+				test.done();	
+			} 
 		}
 	}
 };
