@@ -1,4 +1,6 @@
 var	mediator = require("mediator"),
+	fs = require("fs"),
+	after = require("after"),
 	path = require("path");
 
 mediator.on('boot.error', throwError);
@@ -18,5 +20,22 @@ function routinesLoaded(err) {
 }
 
 function load(directory, callback) {
+	fs.readdir(directory, handleFiles);
 
+	function handleFiles(err, files) {
+		if (err) return mediator.emit('boot.error', err);
+		
+		var next = after(files.length, callback);
+		files.forEach(handleFile);
+
+		function handleFile(file) {
+			var uri = path.join(dir, file);
+			if (file.substr(-3, 3) === ".js") {
+				require(uri);
+				next();
+			} else {
+				load(uri, cb);
+			}
+		}
+	}
 }
