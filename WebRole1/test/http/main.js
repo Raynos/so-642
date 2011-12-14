@@ -1,41 +1,22 @@
-var http = require("http");
+var request = require('request');
+
+var uri = "http://localhost:81";
 
 module.exports = {
 	"test /": function (test) {
 		test.expect(2);
 
-		var req = http.request({
-			host: "localhost",
-			port: 81,
-			path: "/"
-		}, handleResponse);
-		
-		req.on("error", throwError);
+		request(uri, handleResponse);
 
-		req.end();
+		function handleResponse(err, res, body) {
+			if (err) throw err;
 
-		function handleResponse(res) {
-			var body = "";
 			test.equal(res.statusCode, 200, 
 				"statusCode is not 200");
 
-			res.on("data", appendDataToBody);
-
-			res.on("end", testBody);
-
-			function appendDataToBody(chunk) {
-				body += chunk;
-			}
-
-			function testBody() {
-				test.equal(body, "Hello World\n",
-					"body is not hello world");
-				test.done();	
-			} 
+			test.equal(body, "Hello World\n",
+				"body is not hello world");
+			test.done();	
 		}
 	}
 };
-
-function throwError(err) {
-	throw err;
-}
