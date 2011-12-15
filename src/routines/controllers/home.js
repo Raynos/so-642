@@ -1,6 +1,10 @@
-var mediator = require("mediator");
+module.exports = {
+	start: start
+};
 
-mediator.on("controller.home.main", handleMain);
+function start(mediator) {
+	mediator.on("controller.home.main", handleMain);	
+}
 
 function handleMain(req, res) {
 	res.end("Hello World\n");
