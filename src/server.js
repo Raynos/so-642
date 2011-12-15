@@ -1,9 +1,8 @@
-var EventEmitter = require("events").EventEmitter,
-	mediator = new EventEmitter(),
-	load = require("./utils/load");
+var	load = require("./utils/load"),
+	core = require("./utils/core"),
 	path = require("path");
 
-mediator.on('boot.error', throwError);
+core.on('boot.error', throwError);
 
 load(path.join(__dirname, "routines"), routinesLoaded);
 
@@ -13,12 +12,9 @@ function throwError(err) {
 
 function routinesLoaded(err, files) {
 	if (err) {
-		return mediator.emit('boot.error', err);
+		return core.emit('boot.error', err);
 	}
-	Object.keys(files).forEach(startWithMediator);
-	mediator.emit('boot.ready');
 
-	function startWithMediator(name) {
-		files[name].start(mediator);
-	}
+	core.attach(files);
+	core.emit('boot.ready');
 }
