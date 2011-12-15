@@ -1,6 +1,6 @@
-var mediator = require("mediator");
+var mediator = new (require("events").EventEmitter)();
 
-require("../../routines/controllers/home.js")
+require("../../routines/controllers/home.js").start(mediator);
 
 module.exports = {
 	"test controller home main": function (test) {

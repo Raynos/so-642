@@ -1,6 +1,6 @@
-var mediator = require("mediator");
+var mediator = new (require("events").EventEmitter)();
 	
-require("../../routines/server/boot");
+require("../../routines/server/boot").start(mediator);
 
 module.exports = {
 	"test server creation": function (test) {
