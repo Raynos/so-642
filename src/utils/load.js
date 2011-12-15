@@ -18,7 +18,7 @@ function load(directory, callback) {
 		function handleFile(file) {
 			var uri = path.join(directory, file);
 			if (file.substr(-3, 3) === ".js") {
-				objs.push(require(uri));
+				objs[uri] = require(uri);
 				next();
 			} else {
 				load(uri, appendResultsToObjs);
@@ -29,7 +29,11 @@ function load(directory, callback) {
 			if (err) {
 				return callback(err);
 			}
-			objs.push.apply(objs, results);
+			var keys = Object.keys(results);
+			for (var i = 0, len = keys.length; i < len; i++) {
+				var key = keys[i];
+				objs[key] = results[key];
+			}
 			next();
 		}
 	}

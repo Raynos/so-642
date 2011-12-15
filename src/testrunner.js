@@ -9,11 +9,5 @@ function runTests(err, files) {
 		throw err;
 	}
 
-	var obj = {};
-
-	for (var i = 0, len = files.length; i < len; i++) {
-		obj[i] = files[i];
-	}
-
-	nodeunit.reporters.default.run(obj);
+	nodeunit.reporters.default.run(files);
 }
