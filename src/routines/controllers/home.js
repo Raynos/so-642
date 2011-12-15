@@ -1,5 +1,6 @@
 module.exports = {
-	start: start
+	start: start,
+	detach: detach
 };
 
 function start(mediator) {
@@ -8,4 +9,8 @@ function start(mediator) {
 
 function handleMain(req, res) {
 	res.end("Hello World\n");
+}
+
+function detach(mediator) {
+	mediator.removeHandler("controller.home.main", handleMain);
 }
