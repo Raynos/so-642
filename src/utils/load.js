@@ -1,10 +1,15 @@
 var fs = require("fs"),
 	path = require("path"),
+	pd = require("pd"),
 	after = require("after");
 
-module.exports = load;
+module.exports = pd.bindAll({
+	load: load,
+	findFileNames: findFileNames
+});
 
-function load(directory, callback) {
+function findFileNames(directory, callback) {
+	var that = this;
 	var objs = [];
 	fs.readdir(directory, handleFiles);
 
@@ -18,10 +23,10 @@ function load(directory, callback) {
 		function handleFile(file) {
 			var uri = path.join(directory, file);
 			if (file.substr(-3, 3) === ".js") {
-				objs[uri] = require(uri);
+				objs[uri] = uri;
 				next();
 			} else {
-				load(uri, appendResultsToObjs);
+				that.load(uri, appendResultsToObjs);
 			}
 		}
 
@@ -29,12 +34,24 @@ function load(directory, callback) {
 			if (err) {
 				return callback(err);
 			}
-			var keys = Object.keys(results);
-			for (var i = 0, len = keys.length; i < len; i++) {
-				var key = keys[i];
-				objs[key] = results[key];
-			}
+			pd.extend(objs, results);
 			next();
+		}
+	}
+}
+
+function load(directory, callback) {
+	this.findFileNames(directory, mapToObjects);
+
+	function mapToObjects(err, files) {
+		if (err) {
+			return callback(err);
+		}
+		Object.keys(files).forEach(convertToModule);
+		callback(null, files);
+
+		function convertToModule(name) {
+			files[name] = require(name);
 		}
 	}
 }

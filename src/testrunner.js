@@ -1,4 +1,4 @@
-var load = require("./utils/load"),
+var load = require("./utils/load").load,
 	nodeunit = require("nodeunit");
 	path = require("path");
 
