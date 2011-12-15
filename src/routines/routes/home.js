@@ -1,11 +1,21 @@
-var mediator = require("mediator");
+var pd = require("pd");
 
-mediator.on("boot.server.created", attachRoutes);
+module.exports = pd.bindAll({
+	start: start,
+	attachRoutes: attachRoutes
+});
+
+function start(mediator) {
+	this.mediator = mediator;
+	this.mediator.on("boot.server.created", this.attachRoutes);	
+}
 
 function attachRoutes(server) {
+	var that = this;
+
 	server.get("/", handleMain);
 
 	function handleMain(req, res) {
-		mediator.emit("controller.home.main", req, res);
+		that.mediator.emit("controller.home.main", req, res);
 	}
 }
