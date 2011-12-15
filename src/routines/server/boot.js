@@ -1,15 +1,23 @@
-var mediator = require("mediator"),
-	express = require("express");
+var express = require("express"),
+	pd = require("pd");
 
-mediator.on("boot.ready", createServer);
+module.exports = pd.bindAll({
+	start: start,
+	createServer: createServer
+});
+
+function start(mediator) {
+	this.mediator = mediator;
+	this.mediator.on("boot.ready", this.createServer);
+}
 
 function createServer() {
 	var server = express.createServer(),
 		port = process.env.port || 4000;
 
-	mediator.emit("boot.server.created", server);
+	this.mediator.emit("boot.server.created", server);
 
 	server.listen(port);
 
-	mediator.emit("boot.server.listening", port);
+	this.mediator.emit("boot.server.listening", port);
 }
