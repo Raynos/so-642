@@ -15,6 +15,11 @@ function attach(name, module) {
 		return Object.keys(name).forEach(invokeAttach, this);
 	}
 
+	if (this.modules[name]) {
+		this.modules[name].detach(this);
+		delete this.modules[name];
+	}
+
 	this.modules[name] = module;
 
 	module.start(this);
