@@ -10,5 +10,8 @@
 		"nodeunit": "0.6.4",
 		"request": "2.2.9"
 	},
+	"scripts": {
+		"test": "node ./testrunner.js"	
+	},
 	"private": true
 }
