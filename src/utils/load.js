@@ -10,7 +10,7 @@ module.exports = pd.bindAll({
 
 function findFileNames(directory, callback) {
 	var that = this;
-	var objs = [];
+	var objs = {};
 	fs.readdir(directory, handleFiles);
 
 	function handleFiles(err, files) {
